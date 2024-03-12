@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shoe Personality Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes revealSentence {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .sentence {
+            display: inline-block;
+        }
+        .quiz-container {
+            display: flex;
+        }
+        .quiz-column, .result-column {
+            flex: 1; /* Set each column to take half the width using flex */
+        }
+        .answer-button {
+            background-color: transparent;
+            border: 1px solid rgb(0, 0, 0);
+            text-align: left;
+            width: fit-content; /* Let the width be as wide as the text */
+        }
+        .answer-button.selected {
+            background-color: darkblue;
+            color: white
+        }
+        .submit-button-wrapper {
+            position: fixed;
+            bottom: 20px; /* Adjust the value as needed for padding */
+            left: 25%; /* Center the button in the left half of the screen */
+            width: 50%; /* Take up half the width of the screen */
+        }
+        #submitButton {
+            background-color: green;
+            width: 50%;
+            margin: 0 auto; /* Center the button in the div */
+        }
+    </style>
+</head>
+<body>
+    <div class="flex flex-col min-h-screen">
+        <h1 class="text-center text-4xl font-bold my-6">
+            Personality Quiz: Get Your AI-Generated 
+            <input type="text" id="itemType" name="itemType" value="" class="text-4xl font-bold bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" style="border: 2px dashed #4F46E5; cursor: text; width: fit-content;">
+        </h1>
+        <div class="quiz-container">
+            <div id="quiz" class="quiz-column p-4 flex">
+                <!-- Questions will be rendered here -->
+            </div>
+            <div id="result" class="result-column p-4">
+                <div id="summary" class="text-lg"></div>
+                <img id="resultImage" class="mt-4" />
+            </div>
+        </div>
+        <div class="submit-button-wrapper">
+            <button id="submitButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Submit
+            </button>
+        </div>
+        
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var quizContainer = document.getElementById('quiz');
+            var summaryPlaceholder = document.getElementById('summary');
+            var imagePlaceholder = document.getElementById('resultImage');
+            var answers = [];
+
+            fetch('questions')
+            .then(response => response.json())
+            .then(data => {
+                const prependedQuestion = {
+                    "question": "What is your gender?",
+                    "options": ["Male", "Female","Other"]
+                };
+                const modifiedQuestions = [prependedQuestion, ...data.questions];
+                renderQuiz(modifiedQuestions);
+            });
+
+            function renderQuiz(questions) {
+                var urlParams = new URLSearchParams(window.location.search);
+                var itemTypeValue = urlParams.get('item') || localStorage.getItem('itemType') || "Shoes";
+                document.getElementById('itemType').value = itemTypeValue;
+                var firstColumn = document.createElement('div');
+                firstColumn.className = 'w-1/2 p-2';
+                var secondColumn = document.createElement('div');
+                secondColumn.className = 'w-1/2 p-2';
+
+                questions.forEach((question, index) => {
+                    var questionDiv = document.createElement('div');
+                    questionDiv.textContent = question.question;
+                    questionDiv.className = 'mb-4 block font-bold';
+                    questionDiv.style.display = 'flex';
+                    questionDiv.style.flexDirection = 'column';
+                    questionDiv.setAttribute('data-question-index', index);
+
+                    var targetColumn = index % 2 === 0 ? firstColumn : secondColumn;
+                    targetColumn.appendChild(questionDiv);
+
+                    question.options.forEach(answer => {
+                        var answerButton = document.createElement('button');
+                        answerButton.textContent = answer;
+                        answerButton.className = 'answer-button py-1 px-2 rounded m-1';
+                        answerButton.onclick = () => handleAnswerChange(index, answer);
+                        answerButton.setAttribute('data-question-index', index);
+                        questionDiv.appendChild(answerButton);
+                    });
+                });
+
+                quizContainer.appendChild(firstColumn);
+                quizContainer.appendChild(secondColumn);
+            }
+
+            // Update the event listener for the submit button
+            var submitButton = document.getElementById('submitButton');
+            submitButton.onclick = handleSubmit;
+
+            function handleAnswerChange(index, value) {
+                // Use the data-question-index attribute to select buttons for the correct question
+                const buttons = document.querySelectorAll(`#quiz div[data-question-index="${index}"] button`);
+                buttons.forEach(button => {
+                    if (button.textContent !== value) {
+                        button.classList.remove('selected');
+                    }
+                });
+
+                // Highlight the selected answer
+                const selectedButton = Array.from(buttons).find(button => button.textContent === value);
+                if (selectedButton) {
+                    selectedButton.classList.add('selected');
+                }
+                answers[index] = value;
+            }
+            function handleSubmit() {
+                // Clear previous results
+                summaryPlaceholder.innerHTML = '';
+                imagePlaceholder.src = '';
+
+                localStorage.setItem('itemType', document.getElementById('itemType').value);
+                
+                fetch('quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({answers}),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const sentences = data.summary.split('. ');
+                    sentences.forEach((sentence, index) => {
+                        const sentenceElement = document.createElement('span');
+                        sentenceElement.textContent = sentence + (index < sentences.length - 1 ? '. ' : '');
+                        sentenceElement.style.opacity = '0';
+                        sentenceElement.classList.add('sentence');
+                        sentenceElement.style.animation = `revealSentence ${sentences.length}s ${index * 3}s forwards`;
+                        summaryPlaceholder.appendChild(sentenceElement);
+                    });
+                    return fetch('generate-image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            summary: data.summary,
+                            itemType: document.getElementById('itemType').value,
+                            paired_responses: answers.map((answer, index) => {
+                                const questionElement = document.querySelectorAll('#quiz div')[index].querySelector('label');
+                                return {question: questionElement ? questionElement.textContent : "Question not found", answer};
+                            }),
+                        }),
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    imagePlaceholder.src = data.image_url;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "questions": [
+    {
+      "question": "What's your go-to activity on a free afternoon?",
+      "options": [
+        "Catching up on the latest fashion trends",
+        "Going for a nature hike",
+        "Reading a book at a cozy cafe",
+        "Experimenting with new recipes in the kitchen"
+      ]
+    },
+    {
+      "question": "Choose a color palette that speaks to you.",
+      "options": [
+        "Bold and Bright: Reds, Yellows, and Oranges",
+        "Earthy Tones: Greens, Browns, and Tans",
+        "Pastels: Light Pink, Baby Blue, Lavender",
+        "Monochrome: Shades of Black, White, and Grey"
+      ]
+    },
+    {
+      "question": "What's your dream vacation destination?",
+      "options": [
+        "Fashion capitals of the world: Paris, Milan, New York",
+        "An adventurous trek in the mountains",
+        "A quiet retreat in a secluded beach town",
+        "Exploring the culinary delights of a foreign country"
+      ]
+    },
+    {
+      "question": "How would you describe your personal style?",
+      "options": [
+        "Trendy and fashion-forward",
+        "Casual and comfortable",
+        "Unique and eclectic",
+        "Classic and timeless"
+      ]
+    }
+  ]
+}

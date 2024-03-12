@@ -1,0 +1,6 @@
+groq
+openai
+flask
+flask-cors
+requests
+fal

@@ -1,40 +1,49 @@
 {
-  "questions": [
-    {
-      "question": "What's your go-to activity on a free afternoon?",
-      "options": [
-        "Catching up on the latest fashion trends",
-        "Going for a nature hike",
-        "Reading a book at a cozy cafe",
-        "Experimenting with new recipes in the kitchen"
-      ]
-    },
-    {
-      "question": "Choose a color palette that speaks to you.",
-      "options": [
-        "Bold and Bright: Reds, Yellows, and Oranges",
-        "Earthy Tones: Greens, Browns, and Tans",
-        "Pastels: Light Pink, Baby Blue, Lavender",
-        "Monochrome: Shades of Black, White, and Grey"
-      ]
-    },
-    {
-      "question": "What's your dream vacation destination?",
-      "options": [
-        "Fashion capitals of the world: Paris, Milan, New York",
-        "An adventurous trek in the mountains",
-        "A quiet retreat in a secluded beach town",
-        "Exploring the culinary delights of a foreign country"
-      ]
-    },
-    {
-      "question": "How would you describe your personal style?",
-      "options": [
-        "Trendy and fashion-forward",
-        "Casual and comfortable",
-        "Unique and eclectic",
-        "Classic and timeless"
-      ]
-    }
-  ]
+    "questions": [
+        {
+            "question": "What's your ideal vacation?",
+            "options": [
+                "Beach paradise",
+                "Cultural exploration in a historic city",
+                "Adventure in the wilderness",
+                "Cozy staycation"
+            ]
+        },
+        {
+            "question": "Choose a snack:",
+            "options": [
+                "Chips",
+                "Fruit",
+                "Chocolate",
+                "Nuts"
+            ]
+        },
+        {
+            "question": "What's your favorite type of movie?",
+            "options": [
+                "Comedy",
+                "Horror",
+                "Drama",
+                "Documentary"
+            ]
+        },
+        {
+            "question": "How do you like to spend your weekends?",
+            "options": [
+                "Hanging out with friends",
+                "Reading a good book",
+                "Going on an adventure",
+                "Catching up on sleep"
+            ]
+        },
+        {
+            "question": "What's your dream job?",
+            "options": [
+                "Travel blogger",
+                "Professor",
+                "CEO of a tech startup",
+                "Professional artist"
+            ]
+        }
+    ]
 }

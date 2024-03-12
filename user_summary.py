@@ -1,5 +1,7 @@
 import os
+from textwrap import dedent
 from groq import Groq
+from openai import OpenAI
 
 def summarize_user_responses(question_answer_pairs):
     """
@@ -11,27 +13,54 @@ def summarize_user_responses(question_answer_pairs):
     Returns:
     - An assertive string summary of the user's personality.
     """
-    # Initialize Groq client with your API key
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    # client = Groq()
+    client = OpenAI()
 
-    # Prepare the prompt for Groq
-    prompt = f"Given the following user responses to a personality quiz: {question_answer_pairs}, " \
-             "generate 5-sentences: a creative and assertive summary of the user's personality. Be clever and provocative. Just give the summary text without being chatty or restating the user's answers. Use 2nd person voice. Start with: 'You are a ...'"
+    # prompt = dedent(f"""A user gave these secret responses to a personality quiz: <<<<<{question_answer_pairs}>>>>>. You may not refer or allude to the responses directly or indirectly.
+    # Scrub all specifics / examples from the quiz and write a very short personality summary by making bold inferences. You should embellish to be clever and fun. Your response starts with with: 'You are ...'""")
 
-    # Perform a chat completion to generate a summary
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": prompt,
-            }
-        ],
-        model="mixtral-8x7b-32768",
-        temperature=1.0,
-    )
+    prompt = dedent(f"""A user gave these secret responses to a personality quiz: <<<<<{question_answer_pairs}>>>>>. You may not refer or allude to the responses directly or indirectly.
+    Scrub all specifics / examples from the quiz and write a 7-sentence personality summary by making bold inferences. You should embellish to be clever and fun. Your response starts with with: 'You are ...'""")
 
-    # Return the generated summary
-    return chat_completion.choices[0].message.content
+    for attempt in range(3):
+        try:
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                # model="mixtral-8x7b-32768",
+                model="gpt-4-turbo-preview",
+                temperature=0.5,
+            )
+            # temp = chat_completion.choices[0].message.content
+
+            # prompt = dedent(f"""The user is described by: <<<<<{temp}>>>>>. Without restating any of the specific examples or indirectly, write a 7-sentence paragraph about the user's personality and tendencies (like an MBTI summary). You make inferences without explicitly referencing the user's actions / statements / preferences. You should embellish a bit to be clever and fun. Your response starts with with: 'You are a ...'""")
+
+            # chat_completion = client.chat.completions.create(
+            #     messages=[
+            #         {
+            #             "role": "user",
+            #             "content": prompt,
+            #         }
+            #     ],
+            #     # model="mixtral-8x7b-32768",
+            #     model="gpt-4-turbo-preview",
+            #     temperature=0.5,
+            # )
+            return chat_completion.choices[0].message.content
+
+
+
+
+
+        except Exception as e:
+            if attempt < 2:  # Only print error message if not on last attempt
+                print(f"Attempt {attempt + 1} failed with error: {e}")
+            temp = "Error generating completion. Please try again."
+
 
 # Example usage
 if __name__ == "__main__":

@@ -5,6 +5,23 @@
     <title>Shoe Personality Quiz</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey border */
+            border-top: 5px solid #3498db; /* Blue border */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        
+
         @keyframes revealSentence {
             from {
                 opacity: 0;
@@ -73,6 +90,7 @@
             var summaryPlaceholder = document.getElementById('summary');
             var imagePlaceholder = document.getElementById('resultImage');
             var answers = [];
+            var questions = [];
 
             fetch('questions')
             .then(response => response.json())
@@ -83,6 +101,8 @@
                 };
                 const modifiedQuestions = [prependedQuestion, ...data.questions];
                 renderQuiz(modifiedQuestions);
+                questions = modifiedQuestions.map(q => q.question);
+                answers = new Array(questions.length).fill('');
             });
 
             function renderQuiz(questions) {
@@ -123,6 +143,20 @@
             var submitButton = document.getElementById('submitButton');
             submitButton.onclick = handleSubmit;
 
+            function showLoader() {
+                const loader = document.createElement('div');
+                loader.className = 'loader';
+                loader.id = 'loader'; // Add an ID to easily find and remove it later
+                document.getElementById('resultImage').after(loader); // Place after the resultImage element
+            }
+
+            function hideLoader() {
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.remove(); // Remove the loader from the DOM
+                }
+            }
+
             function handleAnswerChange(index, value) {
                 // Use the data-question-index attribute to select buttons for the correct question
                 const buttons = document.querySelectorAll(`#quiz div[data-question-index="${index}"] button`);
@@ -140,6 +174,9 @@
                 answers[index] = value;
             }
             function handleSubmit() {
+                // Show loader when starting to fetch
+                showLoader();
+
                 // Clear previous results
                 summaryPlaceholder.innerHTML = '';
                 imagePlaceholder.src = '';
@@ -151,7 +188,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({answers}),
+                    body: JSON.stringify({answers: answers, questions: questions}),
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -164,6 +201,10 @@
                         sentenceElement.style.animation = `revealSentence ${sentences.length}s ${index * 3}s forwards`;
                         summaryPlaceholder.appendChild(sentenceElement);
                     });
+                    // Hide loader after text is generated and before starting image fetch
+                    hideLoader();
+                    // Show loader again for image generation
+                    showLoader();
                     return fetch('generate-image', {
                         method: 'POST',
                         headers: {
@@ -182,6 +223,8 @@
                 .then(response => response.json())
                 .then(data => {
                     imagePlaceholder.src = data.image_url;
+                    // Hide loader after image is loaded
+                    hideLoader();
                 });
             }
         });

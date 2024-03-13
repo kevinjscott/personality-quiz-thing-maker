@@ -67,7 +67,7 @@ def generate_new_questions():
             new_questions_json = json.loads(chat_completion.choices[0].message.content)
             with open('./static/js/quiz_questions.json', 'w') as file:
                 json.dump(new_questions_json, file, indent=4)
-            print(new_questions_json)
+            # print(new_questions_json)
             break  # Break the loop if successful
         except Exception as e:
             print(f"Attempt {attempt + 1} failed with error: {e}")

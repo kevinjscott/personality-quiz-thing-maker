@@ -32,7 +32,7 @@ def generate_image(summary, paired_responses=None, engine="fal", item="shoes"):
     )
 
     generated_prompt = chat_completion.choices[0].message.content
-    print(generated_prompt)
+    # print(generated_prompt)
 
     if engine == "fal":
         # hit the fal API

@@ -143,11 +143,18 @@
             var submitButton = document.getElementById('submitButton');
             submitButton.onclick = handleSubmit;
 
-            function showLoader() {
+            function showLoader(targetElement = null) {
+                // First, remove any existing loaders
+                hideLoader();
+
                 const loader = document.createElement('div');
                 loader.className = 'loader';
                 loader.id = 'loader'; // Add an ID to easily find and remove it later
-                document.getElementById('resultImage').after(loader); // Place after the resultImage element
+                if (targetElement) {
+                    targetElement.after(loader); // Place after the specified element
+                } else {
+                    document.getElementById('resultImage').after(loader); // Default placement
+                }
             }
 
             function hideLoader() {
@@ -200,6 +207,11 @@
                         sentenceElement.classList.add('sentence');
                         sentenceElement.style.animation = `revealSentence ${sentences.length}s ${index * 3}s forwards`;
                         summaryPlaceholder.appendChild(sentenceElement);
+
+                        // Update the loader's position after the last visible sentence
+                        sentenceElement.addEventListener('animationstart', (e) => {
+                            showLoader(e.target);
+                        });
                     });
                     // Hide loader after text is generated and before starting image fetch
                     hideLoader();
@@ -223,8 +235,10 @@
                 .then(response => response.json())
                 .then(data => {
                     imagePlaceholder.src = data.image_url;
-                    // Hide loader after image is loaded
-                    hideLoader();
+                    imagePlaceholder.onload = function() {
+                        // Hide loader after image is loaded
+                        hideLoader();
+                    };
                 });
             }
         });

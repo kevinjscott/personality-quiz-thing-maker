@@ -1,48 +1,48 @@
 {
     "questions": [
         {
-            "question": "What's your ideal vacation?",
+            "question": "What's your go-to coffee order?",
             "options": [
-                "Beach paradise",
-                "Cultural exploration in a historic city",
-                "Adventure in the wilderness",
-                "Cozy staycation"
+                "Black coffee",
+                "Iced latte",
+                "Cappuccino",
+                "Frappuccino"
             ]
         },
         {
-            "question": "Choose a snack:",
+            "question": "Choose a vacation destination.",
             "options": [
-                "Chips",
-                "Fruit",
-                "Chocolate",
-                "Nuts"
+                "Beach",
+                "Mountains",
+                "City",
+                "Countryside"
             ]
         },
         {
-            "question": "What's your favorite type of movie?",
+            "question": "Pick a movie genre.",
             "options": [
                 "Comedy",
                 "Horror",
-                "Drama",
-                "Documentary"
+                "Romance",
+                "Action"
             ]
         },
         {
-            "question": "How do you like to spend your weekends?",
+            "question": "What's your favorite time of the day?",
             "options": [
-                "Hanging out with friends",
-                "Reading a good book",
-                "Going on an adventure",
-                "Catching up on sleep"
+                "Morning",
+                "Afternoon",
+                "Evening",
+                "Night"
             ]
         },
         {
-            "question": "What's your dream job?",
+            "question": "Choose a pet.",
             "options": [
-                "Travel blogger",
-                "Professor",
-                "CEO of a tech startup",
-                "Professional artist"
+                "Dog",
+                "Cat",
+                "Fish",
+                "Bird"
             ]
         }
     ]

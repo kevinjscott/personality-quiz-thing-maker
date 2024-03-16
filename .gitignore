@@ -2,3 +2,5 @@
 __pycache__
 *quiz_questions.json
 .local
+*.pyc
+*.sqlite

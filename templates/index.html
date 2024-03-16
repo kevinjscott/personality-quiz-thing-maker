@@ -36,9 +36,11 @@
         }
         .quiz-container {
             display: flex;
+            flex-wrap: wrap;
         }
         .quiz-column, .result-column {
             flex: 1; /* Set each column to take half the width using flex */
+            flex-direction: column; /* This will stack children elements vertically */
         }
         .answer-button {
             background-color: transparent;
@@ -97,11 +99,6 @@
                 <img id="resultImage" class="mt-4" />
             </div>
         </div>
-        <div class="submit-button-wrapper">
-            <button id="submitButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Submit
-            </button>
-        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -128,6 +125,11 @@
                 var urlParams = new URLSearchParams(window.location.search);
                 var itemTypeValue = urlParams.get('item') || localStorage.getItem('itemType') || "Shoes";
                 document.getElementById('itemType').value = itemTypeValue;
+
+                // Create a container for the quiz columns
+                var columnsContainer = document.createElement('div');
+                columnsContainer.className = 'flex flex-wrap justify-between'; // Add justify-between for spacing
+
                 var firstColumn = document.createElement('div');
                 firstColumn.className = 'w-1/2 p-2';
                 var secondColumn = document.createElement('div');
@@ -154,19 +156,31 @@
                     });
                 });
 
-                quizContainer.appendChild(firstColumn);
-                quizContainer.appendChild(secondColumn);
+                columnsContainer.appendChild(firstColumn);
+                columnsContainer.appendChild(secondColumn);
+                quizContainer.appendChild(columnsContainer); // Append the columns container to the quiz container
+
+                // Append the submit button to the quizContainer, not inside the columnsContainer
+                var submitButtonWrapper = document.createElement('div');
+                submitButtonWrapper.className = 'submit-button-wrapper w-full'; // w-full to take the full width
+                var submitButton = document.createElement('button');
+                submitButton.id = 'submitButton';
+                submitButton.textContent = 'Submit';
+                submitButton.className = 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded';
+                submitButton.onclick = handleSubmit;
+                submitButtonWrapper.appendChild(submitButton);
+
+                quizContainer.appendChild(submitButtonWrapper); // This places the button below the columns
             }
 
-            // Update the event listener for the submit button
-            var submitButton = document.getElementById('submitButton');
-            submitButton.onclick = handleSubmit;
+            function showLoader(targetElement) {
+                // First, remove any existing loader
+                hideLoader();
 
-            function showLoader() {
                 const loader = document.createElement('div');
                 loader.className = 'loader';
-                loader.id = 'loader'; // Add an ID to easily find and remove it later
-                document.getElementById('resultImage').after(loader); // Place after the resultImage element
+                loader.id = 'loader';
+                targetElement.before(loader); // Insert the loader right before the target element
             }
 
             function hideLoader() {
@@ -193,15 +207,15 @@
                 answers[index] = value;
             }
             function handleSubmit() {
-                // Show loader when starting to fetch
-                showLoader();
-
                 // Clear previous results
                 summaryPlaceholder.innerHTML = '';
                 imagePlaceholder.src = '';
 
                 localStorage.setItem('itemType', document.getElementById('itemType').value);
-                
+
+                // Initially show the loader above the summary placeholder
+                showLoader(summaryPlaceholder);
+
                 fetch('quiz', {
                     method: 'POST',
                     headers: {
@@ -219,11 +233,25 @@
                         sentenceElement.classList.add('sentence');
                         sentenceElement.style.animation = `revealSentence ${sentences.length}s ${index * 3}s forwards`;
                         summaryPlaceholder.appendChild(sentenceElement);
+
+                        sentenceElement.addEventListener('animationstart', () => {
+                            // Show loader before revealing the next sentence
+                            if (index < sentences.length - 1) {
+                                showLoader(sentenceElement.nextSibling);
+                            }
+                        });
+
+                        sentenceElement.addEventListener('animationend', () => {
+                            // Remove loader after sentence is revealed
+                            hideLoader();
+
+                            // If it's the last sentence, show the loader above the image
+                            if (index === sentences.length - 1) {
+                                showLoader(imagePlaceholder);
+                            }
+                        });
                     });
-                    // Hide loader after text is generated and before starting image fetch
-                    hideLoader();
-                    // Show loader again for image generation
-                    showLoader();
+
                     return fetch('generate-image', {
                         method: 'POST',
                         headers: {
@@ -243,7 +271,11 @@
                 .then(data => {
                     imagePlaceholder.src = data.image_url;
                     // Hide loader after image is loaded
-                    hideLoader();
+                    imagePlaceholder.onload = hideLoader; // Ensure loader is hidden after image loads
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    hideLoader(); // Ensure loader is hidden even if there's an error
                 });
             }
         });

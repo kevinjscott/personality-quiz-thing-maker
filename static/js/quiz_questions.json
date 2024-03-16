@@ -3,46 +3,46 @@
         {
             "question": "What's your go-to coffee order?",
             "options": [
-                "Black Coffee",
-                "Iced Vanilla Latte",
-                "Cappuccino",
-                "Espresso Shot"
+                "Black coffee",
+                "Caramel latte",
+                "Iced americano",
+                "Matcha latte"
             ]
         },
         {
-            "question": "Choose a vacation destination",
+            "question": "Choose a movie genre for movie night.",
+            "options": [
+                "Comedy",
+                "Horror",
+                "Romance",
+                "Action"
+            ]
+        },
+        {
+            "question": "Pick a vacation destination.",
             "options": [
                 "Paris, France",
                 "Tokyo, Japan",
-                "New York City, USA",
+                "New York, USA",
                 "Cape Town, South Africa"
             ]
         },
         {
-            "question": "Pick a movie genre",
+            "question": "What's your favorite type of music?",
             "options": [
-                "Romance",
-                "Action",
-                "Horror",
-                "Science Fiction"
+                "Pop",
+                "Rock",
+                "Jazz",
+                "Electronic"
             ]
         },
         {
-            "question": "What's your favorite time of the day?",
+            "question": "How do you spend a free afternoon?",
             "options": [
-                "Morning",
-                "Afternoon",
-                "Evening",
-                "Night"
-            ]
-        },
-        {
-            "question": "Choose a type of book to read",
-            "options": [
-                "Mystery/Thriller",
-                "Fantasy",
-                "Biography",
-                "Self-Help"
+                "Reading a book",
+                "Going for a hike",
+                "Binge-watching a series",
+                "Exploring the city"
             ]
         }
     ]

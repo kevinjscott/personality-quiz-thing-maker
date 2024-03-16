@@ -55,6 +55,25 @@
             left: 25%; /* Center the button in the left half of the screen */
             width: 50%; /* Take up half the width of the screen */
         }
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+            .quiz-container {
+                flex-direction: column;
+            }
+            .submit-button-wrapper {
+                left: 0;
+                width: 100%;
+            }
+            .answer-button {
+                padding: 12px;
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
         #submitButton {
             background-color: green;
             width: 50%;

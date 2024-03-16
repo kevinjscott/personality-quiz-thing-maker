@@ -4,22 +4,13 @@
             "question": "What's your go-to coffee order?",
             "options": [
                 "Black coffee",
-                "Iced latte",
-                "Cappuccino",
-                "Frappuccino"
+                "Caramel latte",
+                "Iced americano",
+                "Matcha latte"
             ]
         },
         {
-            "question": "Choose a vacation destination.",
-            "options": [
-                "Beach",
-                "Mountains",
-                "City",
-                "Countryside"
-            ]
-        },
-        {
-            "question": "Pick a movie genre.",
+            "question": "Choose a movie genre for movie night.",
             "options": [
                 "Comedy",
                 "Horror",
@@ -28,21 +19,30 @@
             ]
         },
         {
-            "question": "What's your favorite time of the day?",
+            "question": "Pick a vacation destination.",
             "options": [
-                "Morning",
-                "Afternoon",
-                "Evening",
-                "Night"
+                "Paris, France",
+                "Tokyo, Japan",
+                "New York, USA",
+                "Cape Town, South Africa"
             ]
         },
         {
-            "question": "Choose a pet.",
+            "question": "What's your favorite type of music?",
             "options": [
-                "Dog",
-                "Cat",
-                "Fish",
-                "Bird"
+                "Pop",
+                "Rock",
+                "Jazz",
+                "Electronic"
+            ]
+        },
+        {
+            "question": "How do you spend a free afternoon?",
+            "options": [
+                "Reading a book",
+                "Going for a hike",
+                "Binge-watching a series",
+                "Exploring the city"
             ]
         }
     ]

@@ -50,16 +50,54 @@
             color: white
         }
         .submit-button-wrapper {
-            position: fixed;
-            bottom: 20px; /* Adjust the value as needed for padding */
-            left: 25%; /* Center the button in the left half of the screen */
-            width: 50%; /* Take up half the width of the screen */
+            width: 100%; /* Full width */
+            text-align: center; /* Center the button */
+            padding: 20px 0; /* Add some padding above and below the button */
         }
         #submitButton {
             background-color: green;
-            width: 50%;
-            margin: 0 auto; /* Center the button in the div */
+            width: auto; /* Adjust width to content */
+            margin: 0 auto; /* Keep the button centered */
         }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                flex-direction: column;
+            }
+            .quiz-column, .result-column {
+                width: 100%;
+            }
+            .submit-button-wrapper {
+                width: 100%;
+                text-align: center;
+                padding: 20px 0;
+            }
+            #submitButton {
+                width: auto;
+                margin: 20px auto;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+            #result {
+                order: 2;
+            }
+            #resultImage {
+                max-width: 100%;
+                height: auto;
+            }
+            .answer-button {
+                cursor: pointer;
+                padding: 10px; /* Increase padding for better touch */
+                font-size: 14px; /* Adjust font size if necessary */
+            }
+            #itemType {
+                width: 100%;
+                padding: 0 10px;
+                box-sizing: border-box;
+                min-width: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -82,7 +120,6 @@
                 Submit
             </button>
         </div>
-        
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -143,18 +180,11 @@
             var submitButton = document.getElementById('submitButton');
             submitButton.onclick = handleSubmit;
 
-            function showLoader(targetElement = null) {
-                // First, remove any existing loaders
-                hideLoader();
-
+            function showLoader() {
                 const loader = document.createElement('div');
                 loader.className = 'loader';
                 loader.id = 'loader'; // Add an ID to easily find and remove it later
-                if (targetElement) {
-                    targetElement.after(loader); // Place after the specified element
-                } else {
-                    document.getElementById('resultImage').after(loader); // Default placement
-                }
+                document.getElementById('resultImage').after(loader); // Place after the resultImage element
             }
 
             function hideLoader() {
@@ -207,11 +237,6 @@
                         sentenceElement.classList.add('sentence');
                         sentenceElement.style.animation = `revealSentence ${sentences.length}s ${index * 3}s forwards`;
                         summaryPlaceholder.appendChild(sentenceElement);
-
-                        // Update the loader's position after the last visible sentence
-                        sentenceElement.addEventListener('animationstart', (e) => {
-                            showLoader(e.target);
-                        });
                     });
                     // Hide loader after text is generated and before starting image fetch
                     hideLoader();
@@ -235,10 +260,8 @@
                 .then(response => response.json())
                 .then(data => {
                     imagePlaceholder.src = data.image_url;
-                    imagePlaceholder.onload = function() {
-                        // Hide loader after image is loaded
-                        hideLoader();
-                    };
+                    // Hide loader after image is loaded
+                    hideLoader();
                 });
             }
         });

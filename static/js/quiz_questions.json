@@ -10,38 +10,38 @@
             ]
         },
         {
-            "question": "Choose a vacation destination",
-            "options": [
-                "Beach",
-                "Mountains",
-                "City",
-                "Countryside"
-            ]
-        },
-        {
-            "question": "What's your favorite type of movie?",
+            "question": "Pick a movie genre you could watch forever.",
             "options": [
                 "Comedy",
                 "Horror",
                 "Romance",
-                "Action"
+                "Sci-fi"
             ]
         },
         {
-            "question": "Pick a type of cuisine",
+            "question": "If you could travel anywhere, where would you go?",
             "options": [
-                "Italian",
-                "Mexican",
-                "Japanese",
-                "Indian"
+                "Paris",
+                "Tokyo",
+                "New York",
+                "Cairo"
+            ]
+        },
+        {
+            "question": "What's your favorite social media platform?",
+            "options": [
+                "Instagram",
+                "Twitter",
+                "Facebook",
+                "TikTok"
             ]
         },
         {
             "question": "How do you like to spend your free time?",
             "options": [
                 "Reading",
-                "Watching movies",
-                "Outdoor activities",
+                "Watching TV",
+                "Hiking",
                 "Hanging out with friends"
             ]
         }

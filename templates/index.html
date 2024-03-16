@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Shoe Personality Quiz</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -59,44 +60,25 @@
             width: auto; /* Adjust width to content */
             margin: 0 auto; /* Keep the button centered */
         }
-
+        /* Responsive styles for smaller screens */
         @media (max-width: 768px) {
             .quiz-container {
                 flex-direction: column;
             }
-            .quiz-column, .result-column {
-                width: 100%;
-            }
             .submit-button-wrapper {
+                left: 0;
                 width: 100%;
-                text-align: center;
-                padding: 20px 0;
-            }
-            #submitButton {
-                width: auto;
-                margin: 20px auto;
-                padding: 10px 20px;
-                cursor: pointer;
-            }
-            #result {
-                order: 2;
-            }
-            #resultImage {
-                max-width: 100%;
-                height: auto;
             }
             .answer-button {
-                cursor: pointer;
-                padding: 10px; /* Increase padding for better touch */
-                font-size: 14px; /* Adjust font size if necessary */
+                padding: 12px;
+                font-size: 16px;
             }
-            #itemType {
-                width: 100%;
-                padding: 0 10px;
-                box-sizing: border-box;
-                min-width: 0;
+            h1 {
+                font-size: 2rem;
             }
         }
+
+
 
     </style>
 </head>

@@ -28,21 +28,21 @@
             ]
         },
         {
-            "question": "How do you like to spend a free afternoon?",
+            "question": "Pick a type of cuisine",
             "options": [
-                "Reading",
-                "Hiking",
-                "Binge-watching TV shows",
-                "Exploring a new place"
+                "Italian",
+                "Mexican",
+                "Japanese",
+                "Indian"
             ]
         },
         {
-            "question": "Pick a type of cuisine for dinner",
+            "question": "How do you like to spend your free time?",
             "options": [
-                "Italian",
-                "Japanese",
-                "Mexican",
-                "Indian"
+                "Reading",
+                "Watching movies",
+                "Outdoor activities",
+                "Hanging out with friends"
             ]
         }
     ]

@@ -3,46 +3,46 @@
         {
             "question": "What's your go-to coffee order?",
             "options": [
-                "Black coffee",
-                "Latte",
+                "Black Coffee",
+                "Iced Vanilla Latte",
                 "Cappuccino",
-                "Cold brew"
+                "Espresso Shot"
             ]
         },
         {
-            "question": "Pick a movie genre you could watch forever.",
+            "question": "Choose a vacation destination",
             "options": [
-                "Comedy",
-                "Horror",
+                "Paris, France",
+                "Tokyo, Japan",
+                "New York City, USA",
+                "Cape Town, South Africa"
+            ]
+        },
+        {
+            "question": "Pick a movie genre",
+            "options": [
                 "Romance",
-                "Sci-fi"
+                "Action",
+                "Horror",
+                "Science Fiction"
             ]
         },
         {
-            "question": "If you could travel anywhere, where would you go?",
+            "question": "What's your favorite time of the day?",
             "options": [
-                "Paris",
-                "Tokyo",
-                "New York",
-                "Cairo"
+                "Morning",
+                "Afternoon",
+                "Evening",
+                "Night"
             ]
         },
         {
-            "question": "What's your favorite social media platform?",
+            "question": "Choose a type of book to read",
             "options": [
-                "Instagram",
-                "Twitter",
-                "Facebook",
-                "TikTok"
-            ]
-        },
-        {
-            "question": "How do you like to spend your free time?",
-            "options": [
-                "Reading",
-                "Watching TV",
-                "Hiking",
-                "Hanging out with friends"
+                "Mystery/Thriller",
+                "Fantasy",
+                "Biography",
+                "Self-Help"
             ]
         }
     ]

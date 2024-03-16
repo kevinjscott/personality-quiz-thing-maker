@@ -7,25 +7,35 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes revealSentence {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
         .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
+            border: 5px solid #f3f3f3; /* Light grey border */
+            border-top: 5px solid #3498db; /* Blue border */
             border-radius: 50%;
             width: 50px;
             height: 50px;
             animation: spin 2s linear infinite;
         }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        
+
+        @keyframes revealSentence {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
         .sentence {
             display: inline-block;
-            animation: revealSentence 2s ease-in-out;
+        }
+        .quiz-container {
+            display: flex;
         }
         .quiz-column, .result-column {
             flex: 1; /* Set each column to take half the width using flex */
@@ -40,35 +50,58 @@
             background-color: darkblue;
             color: white
         }
+        .submit-button-wrapper {
+            width: 100%; /* Full width */
+            text-align: center; /* Center the button */
+            padding: 20px 0; /* Add some padding above and below the button */
+        }
         #submitButton {
             background-color: green;
             width: auto; /* Adjust width to content */
             margin: 0 auto; /* Keep the button centered */
         }
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+            .quiz-container {
+                flex-direction: column;
+            }
+            .submit-button-wrapper {
+                left: 0;
+                width: 100%;
+            }
+            .answer-button {
+                padding: 12px;
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+
+
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="flex flex-col min-h-screen justify-between">
-        <header class="text-center p-6">
-            <h1 class="text-4xl font-bold sm:text-2xl">Personality Quiz: Get Your AI-Generated</h1>
-            <input type="text" id="itemType" name="itemType" value="" class="mt-4 text-4xl font-bold bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 w-auto sm:text-2xl sm:w-full">
-        </header>
-
-        <main class="flex flex-col sm:flex-row flex-grow">
-            <div id="quiz" class="flex-grow p-4">
+<body>
+    <div class="flex flex-col min-h-screen">
+        <h1 class="text-center text-4xl font-bold my-6">
+            Personality Quiz: Get Your AI-Generated 
+            <input type="text" id="itemType" name="itemType" value="" class="text-4xl font-bold bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 w-full text-center" style="border: 2px dashed #4F46E5; cursor: text;">
+        </h1>
+        <div class="quiz-container">
+            <div id="quiz" class="quiz-column p-4 flex">
                 <!-- Questions will be rendered here -->
             </div>
-            <div id="result" class="flex-grow p-4">
+            <div id="result" class="result-column p-4">
                 <div id="summary" class="text-lg"></div>
                 <img id="resultImage" class="mt-4" />
             </div>
-        </main>
-
-        <footer class="p-4">
-            <div class="w-full text-center">
-                <button id="submitButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
-            </div>
-        </footer>
+        </div>
+        <div class="submit-button-wrapper">
+            <button id="submitButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Submit
+            </button>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

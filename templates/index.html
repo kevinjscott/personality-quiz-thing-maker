@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Shoe Personality Quiz</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -35,9 +36,11 @@
         }
         .quiz-container {
             display: flex;
+            flex-wrap: wrap;
         }
         .quiz-column, .result-column {
             flex: 1; /* Set each column to take half the width using flex */
+            flex-direction: column; /* This will stack children elements vertically */
         }
         .answer-button {
             background-color: transparent;
@@ -50,10 +53,9 @@
             color: white
         }
         .submit-button-wrapper {
-            position: fixed;
-            bottom: 20px; /* Adjust the value as needed for padding */
-            left: 25%; /* Center the button in the left half of the screen */
-            width: 50%; /* Take up half the width of the screen */
+            width: 100%; /* Full width */
+            text-align: center; /* Center the button */
+            padding: 20px 0; /* Add some padding above and below the button */
         }
 
         /* Responsive styles for smaller screens */
@@ -76,16 +78,36 @@
 
         #submitButton {
             background-color: green;
-            width: 50%;
-            margin: 0 auto; /* Center the button in the div */
+            width: auto; /* Adjust width to content */
+            margin: 0 auto; /* Keep the button centered */
         }
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+            .quiz-container {
+                flex-direction: column;
+            }
+            .submit-button-wrapper {
+                left: 0;
+                width: 100%;
+            }
+            .answer-button {
+                padding: 12px;
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+
+
     </style>
 </head>
 <body>
     <div class="flex flex-col min-h-screen">
         <h1 class="text-center text-4xl font-bold my-6">
             Personality Quiz: Get Your AI-Generated 
-            <input type="text" id="itemType" name="itemType" value="" class="text-4xl font-bold bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" style="border: 2px dashed #4F46E5; cursor: text; width: fit-content;">
+            <input type="text" id="itemType" name="itemType" value="" class="text-4xl font-bold bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 w-full text-center" style="border: 2px dashed #4F46E5; cursor: text;">
         </h1>
         <div class="quiz-container">
             <div id="quiz" class="quiz-column p-4 flex">
@@ -96,12 +118,6 @@
                 <img id="resultImage" class="mt-4" />
             </div>
         </div>
-        <div class="submit-button-wrapper">
-            <button id="submitButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Submit
-            </button>
-        </div>
-        
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -128,6 +144,11 @@
                 var urlParams = new URLSearchParams(window.location.search);
                 var itemTypeValue = urlParams.get('item') || localStorage.getItem('itemType') || "Shoes";
                 document.getElementById('itemType').value = itemTypeValue;
+
+                // Create a container for the quiz columns
+                var columnsContainer = document.createElement('div');
+                columnsContainer.className = 'flex flex-wrap justify-between'; // Add justify-between for spacing
+
                 var firstColumn = document.createElement('div');
                 firstColumn.className = 'w-1/2 p-2';
                 var secondColumn = document.createElement('div');
@@ -154,26 +175,31 @@
                     });
                 });
 
-                quizContainer.appendChild(firstColumn);
-                quizContainer.appendChild(secondColumn);
+                columnsContainer.appendChild(firstColumn);
+                columnsContainer.appendChild(secondColumn);
+                quizContainer.appendChild(columnsContainer); // Append the columns container to the quiz container
+
+                // Append the submit button to the quizContainer, not inside the columnsContainer
+                var submitButtonWrapper = document.createElement('div');
+                submitButtonWrapper.className = 'submit-button-wrapper w-full'; // w-full to take the full width
+                var submitButton = document.createElement('button');
+                submitButton.id = 'submitButton';
+                submitButton.textContent = 'Submit';
+                submitButton.className = 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded';
+                submitButton.onclick = handleSubmit;
+                submitButtonWrapper.appendChild(submitButton);
+
+                quizContainer.appendChild(submitButtonWrapper); // This places the button below the columns
             }
 
-            // Update the event listener for the submit button
-            var submitButton = document.getElementById('submitButton');
-            submitButton.onclick = handleSubmit;
-
-            function showLoader(targetElement = null) {
-                // First, remove any existing loaders
+            function showLoader(targetElement) {
+                // First, remove any existing loader
                 hideLoader();
 
                 const loader = document.createElement('div');
                 loader.className = 'loader';
-                loader.id = 'loader'; // Add an ID to easily find and remove it later
-                if (targetElement) {
-                    targetElement.after(loader); // Place after the specified element
-                } else {
-                    document.getElementById('resultImage').after(loader); // Default placement
-                }
+                loader.id = 'loader';
+                targetElement.before(loader); // Insert the loader right before the target element
             }
 
             function hideLoader() {
@@ -200,15 +226,15 @@
                 answers[index] = value;
             }
             function handleSubmit() {
-                // Show loader when starting to fetch
-                showLoader();
-
                 // Clear previous results
                 summaryPlaceholder.innerHTML = '';
                 imagePlaceholder.src = '';
 
                 localStorage.setItem('itemType', document.getElementById('itemType').value);
-                
+
+                // Initially show the loader above the summary placeholder
+                showLoader(summaryPlaceholder);
+
                 fetch('quiz', {
                     method: 'POST',
                     headers: {
@@ -227,15 +253,24 @@
                         sentenceElement.style.animation = `revealSentence ${sentences.length}s ${index * 3}s forwards`;
                         summaryPlaceholder.appendChild(sentenceElement);
 
-                        // Update the loader's position after the last visible sentence
-                        sentenceElement.addEventListener('animationstart', (e) => {
-                            showLoader(e.target);
+                        sentenceElement.addEventListener('animationstart', () => {
+                            // Show loader before revealing the next sentence
+                            if (index < sentences.length - 1) {
+                                showLoader(sentenceElement.nextSibling);
+                            }
+                        });
+
+                        sentenceElement.addEventListener('animationend', () => {
+                            // Remove loader after sentence is revealed
+                            hideLoader();
+
+                            // If it's the last sentence, show the loader above the image
+                            if (index === sentences.length - 1) {
+                                showLoader(imagePlaceholder);
+                            }
                         });
                     });
-                    // Hide loader after text is generated and before starting image fetch
-                    hideLoader();
-                    // Show loader again for image generation
-                    showLoader();
+
                     return fetch('generate-image', {
                         method: 'POST',
                         headers: {
@@ -254,10 +289,12 @@
                 .then(response => response.json())
                 .then(data => {
                     imagePlaceholder.src = data.image_url;
-                    imagePlaceholder.onload = function() {
-                        // Hide loader after image is loaded
-                        hideLoader();
-                    };
+                    // Hide loader after image is loaded
+                    imagePlaceholder.onload = hideLoader; // Ensure loader is hidden after image loads
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    hideLoader(); // Ensure loader is hidden even if there's an error
                 });
             }
         });
